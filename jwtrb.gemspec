@@ -2,7 +2,7 @@
 require File.expand_path('../lib/jwt/version', __FILE__)
 
 Gem::Specification.new do |spec|
-  spec.name          = "jwt"
+  spec.name          = 'jwt-rb'
   spec.version       = JWT::VERSION
   spec.authors       = ["ChupipandiCrew"]
   spec.email         = ["chupi@chupipandi.com"]
