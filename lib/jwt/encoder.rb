@@ -46,8 +46,10 @@ module JWT
         digest           = generate_digest(parsed_algorithm)
 
         if @algorithm =~ /^HS/
+          hs_key_format!(key)
           sign_hmac(digest, key, input)
         else
+          rs_key_format!(key)
           sign_rsa(key, digest, input)
         end
       end

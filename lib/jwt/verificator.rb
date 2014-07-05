@@ -13,6 +13,17 @@ module JWT
           fail NotImplementedError.new("#{algorithm} is not supported")
         end
       end
+
+      def hs_key_format!(key)
+        fail InvalidKeyFormatError unless key.is_a? String
+      end
+
+      def rs_key_format!(key)
+        fail InvalidKeyFormatError unless key.is_a? OpenSSL::PKey::RSA
+      end
+
+      class InvalidKeyFormatError < StandardError
+      end
     end
   end
 end

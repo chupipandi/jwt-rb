@@ -64,10 +64,12 @@ module JWT
         digest           = generate_digest(parsed_algorithm)
 
         if @algorithm =~ /^HS/
+          hs_key_format!(key)
           signed_input = sign_hmac(digest, key, input)
           fail StandardError unless secure_compare(signature, signed_input)
         else
-          key.verify(digest, signature, input)
+          rs_key_format!(key)
+          verify_rsa(key, digest, signature, input)
         end
       end
 
