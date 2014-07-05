@@ -1,12 +1,9 @@
-require 'json'
-require 'base64'
-require 'openssl'
-
 module JWT
   class Encoder
-    class << self
-      SUPPORTED_ALGS = %w(HS256 HS384 HS512 RS256 RS384 RS512)
+    include JWT::Verificator
+    include JWT::Signature
 
+    class << self
       def encode(payload, key, options)
         @algorithm = options[:algorithm] || 'HS256'
 
@@ -20,7 +17,7 @@ module JWT
       private
 
       def encode_header
-        base64(header)
+        base64_encode(header)
       end
 
       def header
@@ -28,10 +25,10 @@ module JWT
       end
 
       def encode_payload(payload)
-        base64(payload.to_json)
+        base64_encode(payload.to_json)
       end
 
-      def base64(string)
+      def base64_encode(string)
         Base64.encode64(string).tr('+/', '-_').gsub(/[\n=]/, '')
       end
 
@@ -39,23 +36,22 @@ module JWT
         input     = [header, payload].join('.')
         signature = sign(input, key)
 
-        base64(signature)
+        base64_encode(signature)
       end
 
       def sign(input, key)
-        if !SUPPORTED_ALGS.include? @algorithm
-          fail NotImplementedError.new("#{@algorithm} is not supported")
-        end
+        supported_algorithm!(@algorithm)
 
-        parsed_algorithm = @algorithm.sub(/^../, 'sha')
-        digest           = OpenSSL::Digest.new(parsed_algorithm)
+        parsed_algorithm = parse_algorithm(@algorithm)
+        digest           = generate_digest(parsed_algorithm)
 
         if @algorithm =~ /^HS/
-          OpenSSL::HMAC.digest(digest, key, input)
+          sign_hmac(digest, key, input)
         else
-          key.sign(digest, input) rescue StandardError.new('Your key needs to be able to .sign()')
+          sign_rsa(key, digest, input)
         end
       end
     end
   end
 end
+
