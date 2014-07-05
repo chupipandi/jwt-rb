@@ -1,13 +1,13 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'jwt/rb/version'
+require 'jwtrb/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "jwt-rb"
-  spec.version       = Jwt::Rb::VERSION
-  spec.authors       = ["Luismi Ramirez"]
-  spec.email         = ["luismir89@gmail.com"]
+  spec.version       = JWTRB::VERSION
+  spec.authors       = ["ChupipandiCrew"]
+  spec.email         = ["chupi@chupipandi.com"]
   spec.summary       = %q{TODO: Write a short summary. Required.}
   spec.description   = %q{TODO: Write a longer description. Optional.}
   spec.homepage      = ""
