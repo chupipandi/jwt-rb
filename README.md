@@ -1,4 +1,4 @@
-# Jwt::Rb
+# Jwt-rb
 
 TODO: Write a gem description
 
