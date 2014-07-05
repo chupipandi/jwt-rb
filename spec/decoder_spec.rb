@@ -59,3 +59,4 @@ PIVKEY
       .to raise_error JWT::Verificator::ClassMethods::InvalidKeyFormatError
   end
 end
+
