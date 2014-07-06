@@ -11,7 +11,8 @@ module JWT
         validate_jwt!
 
         header, payload, input, signature = decode_token
-
+        
+        verify_claims!(payload, options)
         verify_signature!(key, signature, input)
 
         [payload, header]

@@ -6,10 +6,11 @@ module JWT
     class << self
       def encode(payload, key, options)
         @algorithm = options[:algorithm] || 'HS256'
+        @payload   = payload
 
         header    = encode_header
-        payload   = encode_payload(payload)
-        signature = encode_signature(header, payload, key)
+        payload   = decorate_and_encode_payload(options[:claims] || {})
+        signature = encode_signature(header, key)
 
         [header, payload, signature].join('.')
       end
@@ -24,16 +25,25 @@ module JWT
         { typ: 'JWT', alg: @algorithm }.to_json
       end
 
-      def encode_payload(payload)
-        base64_encode(payload.to_json)
+      def encode_payload
+        base64_encode(@payload.to_json)
+      end
+
+      def decorate_and_encode_payload(claims)
+        @payload[:iat] = Time.now.to_i
+        @payload[:exp] = @payload[:iat] + claims[:exp] if valid_integer_claim(claims[:exp])
+        @payload[:aud] = claims[:aud] if valid_string_claim(claims[:aud])
+        @payload[:iss] = claims[:iss] if valid_string_claim(claims[:iss])
+
+        encode_payload
       end
 
       def base64_encode(string)
         Base64.encode64(string).tr('+/', '-_').gsub(/[\n=]/, '')
       end
 
-      def encode_signature(header, payload, key)
-        input     = [header, payload].join('.')
+      def encode_signature(header, key)
+        input     = [header, @payload].join('.')
         signature = sign(input, key)
 
         base64_encode(signature)

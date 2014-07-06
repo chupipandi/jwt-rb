@@ -22,6 +22,32 @@ module JWT
         fail InvalidKeyFormatError unless key.is_a? OpenSSL::PKey::RSA
       end
 
+      def valid_integer_claim(claim)
+        claim.is_a? Integer
+      end
+
+      def valid_string_claim(claim)
+        claim.is_a? String
+      end
+
+      def verify_claims!(payload, options)
+        validate_expiration(payload[:exp]) if payload[:exp]
+        validate_audience(payload[:aud], options[:aud]) if payload[:aud]
+        validate_issuer(payload[:iss], options[:iss]) if payload[:iss]
+      end
+
+      def validate_expiration(exp)
+        raise StandardError if Time.now.to_i >= exp
+      end
+
+      def validate_audience(aud, given_aud)
+        raise StandardError if given_aud && given_aud != aud
+      end
+
+      def validate_issuer(iss, given_iss)
+        raise StandardError if given_iss && given_iss != iss
+      end
+
       class InvalidKeyFormatError < StandardError
       end
     end
