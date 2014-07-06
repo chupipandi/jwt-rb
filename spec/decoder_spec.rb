@@ -58,5 +58,37 @@ PIVKEY
     expect { JWT.decode(jwt, key) }
       .to raise_error JWT::Verificator::ClassMethods::InvalidKeyFormatError
   end
+
+  it 'raises an error if the token doesnt have the correct number of segments' do
+    secret = 'mysecret'
+    jwt    = 'header.payload.signature.hello?'
+
+    expect { JWT.decode(jwt, key) }
+      .to raise_error StandardError
+  end
+
+  it 'raises an error if the token cant be verified with the current secret key' do
+    secret = 'myothersecret'
+    jwt    = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.Gc_-AK7EN0nCQj6egXy525yk_cssK2A2lgX-w2NM90M'
+
+    expect { JWT.decode(jwt, key) }
+      .to raise_error StandardError
+  end
+
+  it 'raises an error if there is no header' do
+    secret = 'myothersecret'
+    jwt    = '.eyJoZWxsbyI6IndvcmxkIn0.Gc_-AK7EN0nCQj6egXy525yk_cssK2A2lgX-w2NM90M'
+
+    expect { JWT.decode(jwt, key) }
+    .to raise_error StandardError
+  end
+
+  it 'raises an error if there is no payload' do
+    secret = 'myothersecret'
+    jwt    = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..Gc_-AK7EN0nCQj6egXy525yk_cssK2A2lgX-w2NM90M'
+
+    expect { JWT.decode(jwt, key) }
+    .to raise_error StandardError
+  end
 end
 
