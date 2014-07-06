@@ -40,11 +40,13 @@ module JWT
       end
 
       def decode_header(header)
+        fail StandardError if header.empty?
         header = base64_decode(header)
         JSON.parse(header)
       end
 
       def decode_payload(payload)
+        fail StandardError if payload.empty?
         payload = base64_decode(payload)
         JSON.parse(payload)
       end

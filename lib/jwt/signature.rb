@@ -20,12 +20,12 @@ module JWT
         OpenSSL::HMAC.digest(digest, key, input)
       end
 
-      def sign_rsa(key, digest, input)
-        key.sign(digest, input) rescue StandardError.new('Your key needs to be able to .sign()')
+      def sign_rsa(private_key, digest, input)
+        private_key.sign(digest, input) rescue StandardError.new('Your key needs to be able to .sign()')
       end
 
-      def verify_rsa(key, digest, signature, input)
-        fail StandardError unless key.verify(digest, signature, input)
+      def verify_rsa(public_key, digest, signature, input)
+        fail StandardError unless public_key.verify(digest, signature, input)
       end
     end
   end
