@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Encoder' do
   before do
-    allow(Time).to receive(:now).and_return(Time.mktime(2000, 1, 1))
+    allow(Time).to receive(:now).and_return(946681200)
     @payload = { hello: 'world' }
   end
 
