@@ -2,12 +2,13 @@ require 'spec_helper'
 
 describe 'Encoder' do
   before do
+    allow(Time).to receive(:now).and_return(Time.mktime(2000, 1, 1))
     @payload = { hello: 'world' }
   end
 
   it 'encodes a JWT using HS' do
     secret       = 'mysecret'
-    expected_jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.Gc_-AK7EN0nCQj6egXy525yk_cssK2A2lgX-w2NM90M'
+    expected_jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIiwiaWF0Ijo5NDY2ODEyMDB9.XNHCL9anTmqt31OVA91Px-bQ6QJxTrRlkiysluDJeKo'
     jwt          = JWT.encode(@payload, secret)
 
     expect(jwt).to eq(expected_jwt)
@@ -25,7 +26,7 @@ D9G1FH9gCcECIQCKaTBxKKP4PDjktmnPDBzGOKz17BZ+7XSOovmgxGhNlwIhAIaQ
 /z9AMGKMCwy1/oGt6viqaY/Kdnh6CrkvEofRAdzB
 -----END RSA PRIVATE KEY-----
 PIVKEY
-    expected_jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.E0f3M2R4p1_pEmDFp3PZNfXwLp6m3z7MNX468o8gQCYeslnOMdCGvzl1pCJhDs5M7KnaSlvPm_Be3WjYrk8ZDQ'
+    expected_jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIiwiaWF0Ijo5NDY2ODEyMDB9.WKVdIXaohabURkq7Z6Gn5wLJNhjydYFvqflaxw27CLJG9CVlyJJJ4E47bUGHAbPoUTKq3gZp7ubAecRcOJNDng'
     jwt          = JWT.encode(@payload, key, algorithm: 'RS256')
     expect(jwt).to eq(expected_jwt)
   end
