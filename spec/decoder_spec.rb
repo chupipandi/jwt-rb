@@ -14,20 +14,15 @@ describe 'Decoder' do
   end
 
   it 'decodes a valid JWT using RS' do
-    key = OpenSSL::PKey::RSA.new(<<-PIVKEY)
------BEGIN RSA PRIVATE KEY-----
-MIIBOgIBAAJAa3OaqnpApn6lqTVCefBLjcXxiN22Ks3HZcyy4xnxhlJK1MxqNMJs
-FLCvIIwsMBFrHpWs+iZ8SCA2GzvoPn5wlwIDAQABAkBKAt20sPJY/AD1VNcOEKKp
-637bzAMO5qCCkQVigdsnriCab5AL+2M4f4XD6jI5OJkG6KZzse96PjmaTyWwZcvB
-AiEApycN0oyYeEISG14YUntH4zmiOSJb+rhZrRH+z45B+SECIQCkkNxM+IhTCp4W
-hZLDTYum329QOfHPyEjEi7if8QgatwIgY8/AQz/NM9JQOaNgZrBS5u5dXjyULAy1
-D9G1FH9gCcECIQCKaTBxKKP4PDjktmnPDBzGOKz17BZ+7XSOovmgxGhNlwIhAIaQ
-/z9AMGKMCwy1/oGt6viqaY/Kdnh6CrkvEofRAdzB
------END RSA PRIVATE KEY-----
-PIVKEY
+    public_key = OpenSSL::PKey::RSA.new(<<-KEY)
+-----BEGIN PUBLIC KEY-----
+MFswDQYJKoZIhvcNAQEBBQADSgAwRwJAbHUyVoS3o2iNuAZv/Rw5CjBu3/FTTce+
+kQraVpHf0iDVKsjGkZ8xDz/6SqKKze9F5RifzB7g4XTjO9EUtd4uzwIDAQAB
+-----END PUBLIC KEY-----
+KEY
 
-    jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.E0f3M2R4p1_pEmDFp3PZNfXwLp6m3z7MNX468o8gQCYeslnOMdCGvzl1pCJhDs5M7KnaSlvPm_Be3WjYrk8ZDQ'
-    payload, header = JWT.decode(jwt, key, algorithm: 'RS256')
+    jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.Yj_YlEqKVNWciKA10zNr_ygyiCJB_mByNiX-4lX9Q9Capdzze-CrruC7ddY8rMnRfyIcDXhpcD4fENvxiamgZQ'
+    payload, header = JWT.decode(jwt, public_key, algorithm: 'RS256')
 
     expect(payload).to eq(@payload)
   end
@@ -41,17 +36,12 @@ PIVKEY
   end
 
   it 'raises an error if you dont use a string as a key in HS decoding' do
-    key = OpenSSL::PKey::RSA.new(<<-PIVKEY)
------BEGIN RSA PRIVATE KEY-----
-MIIBOgIBAAJAa3OaqnpApn6lqTVCefBLjcXxiN22Ks3HZcyy4xnxhlJK1MxqNMJs
-FLCvIIwsMBFrHpWs+iZ8SCA2GzvoPn5wlwIDAQABAkBKAt20sPJY/AD1VNcOEKKp
-637bzAMO5qCCkQVigdsnriCab5AL+2M4f4XD6jI5OJkG6KZzse96PjmaTyWwZcvB
-AiEApycN0oyYeEISG14YUntH4zmiOSJb+rhZrRH+z45B+SECIQCkkNxM+IhTCp4W
-hZLDTYum329QOfHPyEjEi7if8QgatwIgY8/AQz/NM9JQOaNgZrBS5u5dXjyULAy1
-D9G1FH9gCcECIQCKaTBxKKP4PDjktmnPDBzGOKz17BZ+7XSOovmgxGhNlwIhAIaQ
-/z9AMGKMCwy1/oGt6viqaY/Kdnh6CrkvEofRAdzB
------END RSA PRIVATE KEY-----
-PIVKEY
+    key = OpenSSL::PKey::RSA.new(<<-KEY)
+-----BEGIN PUBLIC KEY-----
+MFswDQYJKoZIhvcNAQEBBQADSgAwRwJAbHUyVoS3o2iNuAZv/Rw5CjBu3/FTTce+
+kQraVpHf0iDVKsjGkZ8xDz/6SqKKze9F5RifzB7g4XTjO9EUtd4uzwIDAQAB
+-----END PUBLIC KEY-----
+KEY
 
     jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.E0f3M2R4p1_pEmDFp3PZNfXwLp6m3z7MNX468o8gQCYeslnOMdCGvzl1pCJhDs5M7KnaSlvPm_Be3WjYrk8ZDQ'
 
