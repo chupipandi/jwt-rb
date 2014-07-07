@@ -1,7 +1,6 @@
-[![Build Status](https://travis-ci.org/chupipandi/jwt-rb.svg?branch=master)](https://travis-ci.org/chupipandi/jwt-rb)
-
 # Jwt-rb
-
+[![Code Climate](https://codeclimate.com/github/chupipandi/jwt-rb.png)](https://codeclimate.com/github/chupipandi/jwt-rb)
+[![Build Status](https://travis-ci.org/chupipandi/jwt-rb.svg?branch=master)](https://travis-ci.org/chupipandi/jwt-rb)
 TODO: Write a gem description
 
 ## Installation (Coming soon to ruby gems)
