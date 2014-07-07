@@ -1,10 +1,12 @@
+[![Build Status](https://travis-ci.org/chupipandi/jwt-rb.svg?branch=master)](https://travis-ci.org/chupipandi/jwt-rb)
+
 # Jwt-rb
 
 TODO: Write a gem description
 
-## Installation
+## Installation (Coming soon to ruby gems)
 
-Add this line to your application's Gemfile:
+Add this line to your application's Gemfile
 
     gem 'jwt-rb'
 
