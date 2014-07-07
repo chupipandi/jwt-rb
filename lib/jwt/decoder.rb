@@ -12,7 +12,7 @@ module JWT
 
         header, payload, input, signature = decode_token
         
-        verify_claims!(payload, options)
+        verify_claims!(payload, options[:claims])
         verify_signature!(key, signature, input)
 
         [payload, header]

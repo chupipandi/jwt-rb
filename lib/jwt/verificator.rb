@@ -31,9 +31,9 @@ module JWT
       end
 
       def verify_claims!(payload, options)
-        validate_expiration(payload[:exp]) if payload[:exp]
-        validate_audience(payload[:aud], options[:aud]) if payload[:aud]
-        validate_issuer(payload[:iss], options[:iss]) if payload[:iss]
+        validate_expiration(payload['exp']) if payload['exp']
+        validate_audience(payload['aud'], options[:aud]) if payload['aud']
+        validate_issuer(payload['iss'], options[:iss]) if payload['iss']
       end
 
       def validate_expiration(exp)

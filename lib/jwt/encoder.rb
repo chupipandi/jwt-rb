@@ -10,7 +10,7 @@ module JWT
 
         header    = encode_header
         payload   = decorate_and_encode_payload(options[:claims] || {})
-        signature = encode_signature(header, key)
+        signature = encode_signature(header, payload, key)
 
         [header, payload, signature].join('.')
       end
@@ -42,8 +42,8 @@ module JWT
         Base64.encode64(string).tr('+/', '-_').gsub(/[\n=]/, '')
       end
 
-      def encode_signature(header, key)
-        input     = [header, @payload].join('.')
+      def encode_signature(header, payload, key)
+        input     = [header, payload].join('.')
         signature = sign(input, key)
 
         base64_encode(signature)
