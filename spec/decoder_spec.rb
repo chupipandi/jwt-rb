@@ -73,7 +73,7 @@ R+YhQUXaJGXhW0tNapTdIwTAycby0cUCXoA/7IYi4SXSKMT0owQxeQIDAQAB
       jwt    = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.E0f3M2R4p1_pEmDFp3PZNfXwLp6m3z7MNX468o8gQCYeslnOMdCGvzl1pCJhDs5M7KnaSlvPm_Be3WjYrk8ZDQ'
 
       expect { JWT.decode(jwt, secret, algorithm: 'RS256') }
-      .to raise_error JWT::Verificator::ClassMethods::InvalidKeyFormatError
+      .to raise_error JWT::InvalidKeyFormatError
     end
 
     it 'raises an error if you dont use a string as a key in HS decoding' do
@@ -87,15 +87,15 @@ R+YhQUXaJGXhW0tNapTdIwTAycby0cUCXoA/7IYi4SXSKMT0owQxeQIDAQAB
       jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.E0f3M2R4p1_pEmDFp3PZNfXwLp6m3z7MNX468o8gQCYeslnOMdCGvzl1pCJhDs5M7KnaSlvPm_Be3WjYrk8ZDQ'
 
       expect { JWT.decode(jwt, key) }
-      .to raise_error JWT::Verificator::ClassMethods::InvalidKeyFormatError
+      .to raise_error JWT::InvalidKeyFormatError
     end
 
     it 'raises an error if the token doesnt have the correct number of segments' do
       secret = 'mysecret'
       jwt    = 'header.payload.signature.hello?'
 
-      expect { JWT.decode(jwt, key) }
-      .to raise_error StandardError
+      expect { JWT.decode(jwt, secret) }
+      .to raise_error JWT::DecoderError
     end
 
     it 'raises an error if the token cant be verified with the current secret key' do
@@ -103,7 +103,7 @@ R+YhQUXaJGXhW0tNapTdIwTAycby0cUCXoA/7IYi4SXSKMT0owQxeQIDAQAB
       jwt    = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIn0.Gc_-AK7EN0nCQj6egXy525yk_cssK2A2lgX-w2NM90M'
 
       expect { JWT.decode(jwt, secret) }
-      .to raise_error StandardError
+      .to raise_error JWT::VerificationError
     end
 
     it 'raises an error if there is no header' do
@@ -111,7 +111,7 @@ R+YhQUXaJGXhW0tNapTdIwTAycby0cUCXoA/7IYi4SXSKMT0owQxeQIDAQAB
       jwt    = '.eyJoZWxsbyI6IndvcmxkIn0.Gc_-AK7EN0nCQj6egXy525yk_cssK2A2lgX-w2NM90M'
 
       expect { JWT.decode(jwt, secret) }
-      .to raise_error StandardError
+      .to raise_error JWT::DecoderError
     end
 
     it 'raises an error if there is no payload' do
@@ -119,7 +119,7 @@ R+YhQUXaJGXhW0tNapTdIwTAycby0cUCXoA/7IYi4SXSKMT0owQxeQIDAQAB
       jwt    = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..Gc_-AK7EN0nCQj6egXy525yk_cssK2A2lgX-w2NM90M'
 
       expect { JWT.decode(jwt, secret) }
-      .to raise_error StandardError
+      .to raise_error JWT::DecoderError
     end
 
     it 'raises an error if the audience doesnt match' do
@@ -127,7 +127,7 @@ R+YhQUXaJGXhW0tNapTdIwTAycby0cUCXoA/7IYi4SXSKMT0owQxeQIDAQAB
       jwt              = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIiwiaWF0Ijo5NDY2ODEyMDAsImF1ZCI6InJ1Ynlpc3QifQ.u6DB-dpK5zxZUmgprzXtg5yY4djsLLtIv4EAgE_nWSM'
 
       expect { JWT.decode(jwt, secret, claims: { aud: 'phpers' })}
-      .to raise_error StandardError
+      .to raise_error JWT::VerificationError
     end
 
     it 'raises an error if the issuer doesnt match' do
@@ -135,7 +135,7 @@ R+YhQUXaJGXhW0tNapTdIwTAycby0cUCXoA/7IYi4SXSKMT0owQxeQIDAQAB
       jwt              = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJoZWxsbyI6IndvcmxkIiwiaWF0Ijo5NDY2ODEyMDAsImlzcyI6InRvbmkifQ.I4EoPQzt97rehCBnU8VTcDH5R2KX6b8Ta1t5bANGorc'
 
       expect { JWT.decode(jwt, secret, claims: { iss: 'john' })}
-      .to raise_error StandardError
+      .to raise_error JWT::VerificationError
     end
 
     it 'raises an error if the token expired' do
@@ -147,8 +147,7 @@ R+YhQUXaJGXhW0tNapTdIwTAycby0cUCXoA/7IYi4SXSKMT0owQxeQIDAQAB
       Timecop.travel(Time.at(946767601))
 
       expect { JWT.decode(jwt, secret) }
-      .to raise_error StandardError
+      .to raise_error JWT::VerificationError
     end
   end
 end
-

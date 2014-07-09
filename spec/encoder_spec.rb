@@ -89,7 +89,7 @@ c1CuIOv3cWDJPNMWI57s1U2WF+zbtIkc1zr5+Q==
     it 'raises an error if you dont use a private key on RS algorithms' do
       secret = 'mysecret'
       expect { JWT.encode(@payload, secret, algorithm: 'RS256') }
-        .to raise_error StandardError
+        .to raise_error JWT::InvalidKeyFormatError
     end
   end
 end

@@ -21,7 +21,9 @@ module JWT
       private
 
       def validate_jwt!
-        fail StandardError.new('Invalid JWT') if parse_token.length != 3
+        if parse_token.length != 3
+          fail JWT::DecoderError.new('Invalid number of segments')
+        end
       end
 
       def parse_token
@@ -40,13 +42,13 @@ module JWT
       end
 
       def decode_header(header)
-        fail StandardError if header.empty?
+        fail JWT::DecoderError.new('Empty header') if header.empty?
         header = base64_decode(header)
         JSON.parse(header)
       end
 
       def decode_payload(payload)
-        fail StandardError if payload.empty?
+        fail JWT::DecoderError.new('Empty payload') if payload.empty?
         payload = base64_decode(payload)
         JSON.parse(payload)
       end
@@ -69,7 +71,10 @@ module JWT
         if @algorithm =~ /^HS/
           hs_key_format!(key)
           signed_input = sign_hmac(digest, key, input)
-          fail StandardError unless secure_compare(signature, signed_input)
+
+          unless secure_compare(signature, signed_input)
+            fail JWT::VerificationError.new('Signature does not match')
+          end
         else
           rs_key_format!(key)
           verify_rsa(key, digest, signature, input)

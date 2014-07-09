@@ -15,11 +15,11 @@ module JWT
       end
 
       def hs_key_format!(key)
-        fail InvalidKeyFormatError unless key.is_a? String
+        fail JWT::InvalidKeyFormatError unless key.is_a? String
       end
 
       def rs_key_format!(key)
-        fail InvalidKeyFormatError unless key.is_a? OpenSSL::PKey::RSA
+        fail JWT::InvalidKeyFormatError unless key.is_a? OpenSSL::PKey::RSA
       end
 
       def valid_integer_claim(claim)
@@ -37,18 +37,19 @@ module JWT
       end
 
       def validate_expiration(exp)
-        raise StandardError if Time.now.to_i >= exp
+        fail JWT::VerificationError.new('JWT Expired') if Time.now.to_i >= exp
       end
 
       def validate_audience(aud, given_aud)
-        raise StandardError if given_aud && given_aud != aud
+        if given_aud && given_aud != aud
+          fail JWT::VerificationError.new("Invalid Audience. Expected: #{aud}")
+        end
       end
 
       def validate_issuer(iss, given_iss)
-        raise StandardError if given_iss && given_iss != iss
-      end
-
-      class InvalidKeyFormatError < StandardError
+        if given_iss && given_iss != iss
+          fail JWT::VerificationError.new("Invalid Issuer. Expected: #{iss}") 
+        end
       end
     end
   end
