@@ -1,3 +1,4 @@
+require 'jwt/payload'
 require 'jwt/verificator'
 require 'jwt/signature'
 require 'jwt/encoder'

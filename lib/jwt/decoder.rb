@@ -33,7 +33,7 @@ module JWT
 
         input     = [header, payload].join('.') 
         header    = decode_header(header)
-        payload   = decode_payload(payload)
+        payload   = Payload.new(decode_payload(payload))
         signature = decode_signature(signature)
 
         [header, payload, input, signature]

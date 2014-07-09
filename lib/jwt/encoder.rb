@@ -6,7 +6,7 @@ module JWT
     class << self
       def encode(payload, key, options)
         @algorithm = options[:algorithm] || 'HS256'
-        @payload   = payload
+        @payload   = Payload.new(payload)
 
         header    = encode_header
         payload   = decorate_and_encode_payload(options[:claims] || {})
