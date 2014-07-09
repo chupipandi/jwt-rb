@@ -1,7 +1,7 @@
 # Jwt-rb
 [![Code Climate](https://codeclimate.com/github/chupipandi/jwt-rb.png)](https://codeclimate.com/github/chupipandi/jwt-rb) [![Build Status](https://travis-ci.org/chupipandi/jwt-rb.svg?branch=master)](https://travis-ci.org/chupipandi/jwt-rb)
 
-## Installation (Coming soon to ruby gems)
+## Installation
 
 Add this line to your application's Gemfile
 
@@ -14,6 +14,12 @@ And then execute:
 Or install it yourself as:
 
     $ gem install jwt-rb
+    
+Then you just need to require it where needed:
+
+```ruby
+require 'jwt'
+```
 
 ## Usage
 
