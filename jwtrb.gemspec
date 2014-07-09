@@ -6,9 +6,8 @@ Gem::Specification.new do |spec|
   spec.version       = JWT::VERSION
   spec.authors       = ["ChupipandiCrew"]
   spec.email         = ["chupi@chupipandi.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{Ruby gem to encode/ decode JWT}
+  spec.homepage      = "http://github.com/chupipandi/jwt-rb"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
