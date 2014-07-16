@@ -37,18 +37,18 @@ Or install it yourself as:
 
 Basic token:
 ```ruby
-token = JWT.encode({hello: 'world'}, 'thisismysecret')
+token = JWT.encode({ hello: 'world' }, 'thisismysecret')
 ```
 
 Token with expiration (24 hours):
 ```ruby
-token = JWT.encode({hello: 'world'}, 'thisismysecret', claim: { exp: 86400 })
+token = JWT.encode({ hello: 'world' }, 'thisismysecret', claims: { exp: 86400 })
 ```
 
 Token with RSA key:
 ```ruby
 private_key = OpenSSL::PKey::RSA.generate(512)
-token = JWT.encode({hello: 'world'}, key, algorithm: 'RS256')
+token = JWT.encode({ hello: 'world' }, key, algorithm: 'RS256')
 ```
 
 ###JWT.decode(token, key, options)
