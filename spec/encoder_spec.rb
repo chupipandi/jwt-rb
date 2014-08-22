@@ -91,6 +91,20 @@ c1CuIOv3cWDJPNMWI57s1U2WF+zbtIkc1zr5+Q==
       expect { JWT.encode(@payload, secret, algorithm: 'RS256') }
         .to raise_error JWT::InvalidKeyFormatError
     end
+
+    it 'raises an error if you try to use a public key to encode RSA' do
+      key = OpenSSL::PKey::RSA.new(<<-KEY)
+-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC0rjmyarTybb2W/86QlW4zFOzn
+eirpEzQY0HcWw9XKqr8RH3DMJ+Hy272ZqIr522aaxrzNdBNAhy7Aj5XtuU+76Pm1
+FnV1YA326Fvl9RYISN5WPsAzt2Rgp4HSDuyY+lVbQs2k9o1iuHuflesacHpyCggP
+u5VgP9rmQuP8fy0zJQIDAQAB
+-----END PUBLIC KEY-----
+      KEY
+
+      expect { JWT.encode(@payload, key, algorithm: 'RS256' ) }
+        .to raise_error JWT::VerificationError
+    end
   end
 end
 

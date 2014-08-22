@@ -22,8 +22,9 @@ module JWT
 
       def sign_rsa(private_key, digest, input)
         private_key.sign(digest, input)
-         rescue 
-         JWT::VerificationError.new('Your key needs to be able to .sign()')
+
+        rescue
+          fail JWT::VerificationError.new('You need a private key')
       end
 
       def verify_rsa(public_key, digest, signature, input)
